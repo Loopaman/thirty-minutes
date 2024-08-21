@@ -59,7 +59,7 @@ document.getElementById("addNewExercise").addEventListener("click", function() {
                 alert('An error occurred while sending the data.');
             });
         } else {
-            alert("Please enter an exercise name.");
+            alert("Do the code if the exercise name is empty.");
         }
     });
 });
