@@ -6,7 +6,6 @@ document.getElementById("addNewExercise").addEventListener("click", function() {
     const form = document.createElement("form");
     form.id = "newExerciseForm"; // Add a unique ID to the form
     // add styles to form
-    form.style.position = "relative";
     form.style.margin = "20px";
     // Create an input field
     const input = document.createElement("input");
@@ -29,6 +28,11 @@ document.getElementById("addNewExercise").addEventListener("click", function() {
     const closeButton = document.createElement("span");
     closeButton.className = "close-button";
     closeButton.innerHTML = '<i class="fas fa-times"></i>'; // Font Awesome close icon
+
+    // add styles to close button
+    closeButton.style.margin = "6px";
+    closeButton.style.cursor = "pointer";
+    closeButton.style.fontSize = "1.8em";
 
     // Append the close button to the form
     form.appendChild(closeButton);
