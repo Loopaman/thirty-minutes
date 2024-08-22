@@ -1,11 +1,13 @@
 document.getElementById("addNewExercise").addEventListener("click", function() {
+
     // Get the card body where the form will be added
     const cardBody = document.querySelector(".card-body");
-    
     // Create a new form element
     const form = document.createElement("form");
     form.id = "newExerciseForm"; // Add a unique ID to the form
-
+    // add styles to form
+    form.style.position = "relative";
+    form.style.margin = "20px";
     // Create an input field
     const input = document.createElement("input");
     input.type = "text";
@@ -22,6 +24,20 @@ document.getElementById("addNewExercise").addEventListener("click", function() {
     // Append the input and submit button to the form
     form.appendChild(input);
     form.appendChild(submitButton);
+
+    // Create a close button with Font Awesome icon
+    const closeButton = document.createElement("span");
+    closeButton.className = "close-button";
+    closeButton.innerHTML = '<i class="fas fa-times"></i>'; // Font Awesome close icon
+
+    // Append the close button to the form
+    form.appendChild(closeButton);
+
+    // Add event listener to the close button
+    closeButton.addEventListener("click", function() {
+        form.style.display = "none"; // Hide the form when the close button is clicked
+    });
+
 
     // Append the form to the card body
     cardBody.appendChild(form);
@@ -47,9 +63,8 @@ document.getElementById("addNewExercise").addEventListener("click", function() {
             })
             .then(response => response.text())
             .then(result => {
-                // Handle the response from the PHP script
-                alert(`Server response: ${result}`);
-                
+                // reload part of html containing exercise list using ajax in jquery
+                $("#exerciseList").load(location.href + " #exerciseList > *");
                 // Optionally, clear the form after submission
                 form.reset();
             })

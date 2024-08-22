@@ -9,11 +9,31 @@ body {
   justify-content: center;
   height: 100vh; /* Full viewport height */
 }
+
 .card {
   width: 18rem;
   background-color: #333; /* Optional: change card background */
   border: none; /* Optional: remove card border */
 }
+
 .btn-success {
   margin-bottom: 15px;
 }
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Adds spacing between buttons */
+}
+
+.btn-group .btn {
+  flex: 1 1 calc(50% - 10px); /* Ensure buttons fit in rows of two */
+  text-align: center;
+  white-space: nowrap;
+  padding: 0.375rem 0.75rem;
+}
+
+.btn-group .btn-check + .btn {
+  width: 100%;
+}
+

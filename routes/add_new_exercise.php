@@ -14,7 +14,6 @@ function insertExercise($exerciseText) {
     // Execute the statement
     try {
         $stmt->execute();
-        echo "Data inserted successfully!";
     } catch (PDOException $e) {
         // Handle execution errors
         echo 'Insert failed: ' . $e->getMessage();
