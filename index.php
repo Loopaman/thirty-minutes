@@ -24,11 +24,13 @@
                 }
                 ?>
             </div>
+            <div id="dynamicInputs" class="mt-3"></div>
         </div>
     </div>
     <script src="external-resources/jquery-3.7.1.min.js"></script>
     <script src="external-resources/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/add_new_exercise.js"></script>
+    <script src="js/exercise_preparation.js"></script>
 </body>
 </html>

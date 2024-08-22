@@ -33,7 +33,7 @@ document.getElementById("addNewExercise").addEventListener("click", function() {
     closeButton.style.margin = "6px";
     closeButton.style.cursor = "pointer";
     closeButton.style.fontSize = "1.8em";
-
+    closeButton.style.color = "red";
     // Append the close button to the form
     form.appendChild(closeButton);
 
