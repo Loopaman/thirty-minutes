@@ -13,7 +13,13 @@ document.getElementById("addNewExercise").addEventListener("click", function() {
     input.name = "exerciseName";
     input.placeholder = "Enter exercise name";
     input.className = "form-control mb-2"; // Optional: add Bootstrap classes for styling
-
+    
+    const existingForm = document.getElementById("newExerciseForm");
+    if (existingForm) {
+        existingForm.style.display = "block"; // Ensure existing form is visible
+        return; // Exit the function if the form is already visible
+    }
+    
     // Create a submit button
     const submitButton = document.createElement("button");
     submitButton.type = "submit";
@@ -23,6 +29,8 @@ document.getElementById("addNewExercise").addEventListener("click", function() {
     // Append the input and submit button to the form
     form.appendChild(input);
     form.appendChild(submitButton);
+    
+    form.style.display = "block"; // Ensure the new form is visible
 
     // Create a close button with Font Awesome icon
     const closeButton = document.createElement("span");
