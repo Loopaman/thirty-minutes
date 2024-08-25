@@ -13,7 +13,7 @@ document.getElementById("addNewExercise").addEventListener("click", function() {
     input.name = "exerciseName";
     input.placeholder = "Enter exercise name";
     input.className = "form-control mb-2"; // Optional: add Bootstrap classes for styling
-    
+    /* preventing duplicate submit button and input field on every click */
     const existingForm = document.getElementById("newExerciseForm");
     if (existingForm) {
         existingForm.style.display = "block"; // Ensure existing form is visible

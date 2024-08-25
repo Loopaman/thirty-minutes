@@ -11,7 +11,7 @@
 <body>
     
     <div class="card" style="width: 18rem;">
-        <button id="addNewExercise" type="button" class="btn btn-primary">Add New Exercise</button>
+        <button id="addNewExercise" type="button" class="btn btn-outline-secondary"><span><i class="fas fa-plus"></i></span>  Add New Exercise</button>
         <div class="card-body">
             <div id="exerciseList" class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
                 <?php

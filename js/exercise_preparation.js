@@ -1,39 +1,126 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btn-check').forEach((checkbox) => {
-        checkbox.addEventListener('change', function() {
-            const exerciseName = this.id;
-    
-            // Check if the checkbox is selected
-            if (this.checked) {
-                // Create a new div for the input field
-                const inputDiv = document.createElement('div');
-                inputDiv.className = 'reps-input';
-                inputDiv.id = `reps-${exerciseName}`; // Unique ID for the div
-    
-                // Create a label for the input
-                const label = document.createElement('label');
-                label.textContent = `Reps for ${exerciseName}:`;
-    
-                // Create the input field for reps
-                const input = document.createElement('input');
-                input.type = 'number';
-                input.name = `reps-${exerciseName}`;
-                input.placeholder = `Reps for ${exerciseName}`;
-                input.className = 'form-control mb-2';
-    
-                // Append the label and input to the div
-                inputDiv.appendChild(label);
-                inputDiv.appendChild(input);
-    
-                // Append the inputDiv to the form or any container
-                document.querySelector('.card-body').appendChild(inputDiv);
-            } else {
-                // If unchecked, remove the corresponding input field
-                const inputDiv = document.getElementById(`reps-${exerciseName}`);
-                if (inputDiv) {
-                    inputDiv.remove();
-                }
-            }
-        });
+    const cardBody = document.querySelector('.card-body');
+    const startButton = document.createElement('button');
+    startButton.textContent = 'Start';
+    startButton.className = 'btn btn-primary mt-3';
+    startButton.disabled = true;
+    cardBody.appendChild(startButton);
+
+    let setInputContainer = null;
+
+    cardBody.addEventListener('change', function(event) {
+        if (event.target.classList.contains('btn-check')) {
+            handleCheckboxChange(event.target);
+        }
     });
+
+    cardBody.addEventListener('input', function(event) {
+        if (event.target.classList.contains('exercise-preparation-input')) {
+            checkAllInputs();
+        }
+    });
+
+    startButton.addEventListener('click', function() {
+        sendAjaxRequest();
+    });
+
+    function handleCheckboxChange(checkbox) {
+        const exerciseName = checkbox.id;
+        const inputContainerId = `inputs-${exerciseName}`;
+        let inputContainer = document.getElementById(inputContainerId);
+
+        if (checkbox.checked && !inputContainer) {
+            inputContainer = createRepsInputContainer(exerciseName);
+            cardBody.insertBefore(inputContainer, setInputContainer || startButton);
+        } else if (!checkbox.checked && inputContainer) {
+            inputContainer.remove();
+            if (document.querySelectorAll('.input-container').length === 0 && setInputContainer) {
+                setInputContainer.remove();
+                setInputContainer = null;
+            }
+        }
+
+        if (!setInputContainer && document.querySelectorAll('.input-container').length > 0) {
+            setInputContainer = createSetInputContainer();
+            cardBody.insertBefore(setInputContainer, startButton);
+        }
+
+        checkAllInputs();
+    }
+
+    function createRepsInputContainer(exerciseName) {
+        const inputContainer = document.createElement('div');
+        inputContainer.className = 'input-container mb-2';
+        inputContainer.id = `inputs-${exerciseName}`;
+
+        const repsField = createInputField(`reps-${exerciseName}`, `Reps for ${exerciseName}`);
+
+        inputContainer.appendChild(repsField);
+        return inputContainer;
+    }
+
+    function createSetInputContainer() {
+        const setInputContainer = document.createElement('div');
+        setInputContainer.className = 'set-input-container mb-2';
+
+        const setsField = createInputField('sets-all', 'Sets for all exercises');
+        setInputContainer.appendChild(setsField);
+
+        return setInputContainer;
+    }
+
+    function createInputField(name, placeholder) {
+        const field = document.createElement('input');
+        field.type = 'number';
+        field.name = name;
+        field.placeholder = placeholder;
+        field.className = 'form-control mb-2 exercise-preparation-input';
+        field.min = '1';
+        return field;
+    }
+
+    function checkAllInputs() {
+        const inputs = document.querySelectorAll('.exercise-preparation-input');
+        const allFilled = [...inputs].every(input => input.value.trim() !== '');
+
+        startButton.disabled = !allFilled || inputs.length === 0;
+
+        if (allFilled && inputs.length > 0) {
+            console.log("All fields are filled!");
+        } else {
+            console.log("Not all fields are filled or no fields exist.");
+        }
+    }
+
+    function sendAjaxRequest() {
+        const formData = new FormData();
+        document.querySelectorAll('.input-container').forEach(container => {
+            const exerciseName = container.id.replace('inputs-', '');
+            const reps = container.querySelector(`[name^="reps-"]`).value;
+            formData.append(exerciseName, JSON.stringify({ reps }));
+        });
+
+        const sets = document.querySelector('[name="sets-all"]').value;
+        formData.append('sets', sets);
+
+        fetch('process_exercises.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            disableInputs();
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    function disableInputs() {
+        document.querySelectorAll('.btn-check, .exercise-preparation-input').forEach(el => {
+            el.disabled = true;
+        });
+        startButton.disabled = true;
+    }
 });
