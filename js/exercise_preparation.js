@@ -97,23 +97,38 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.input-container').forEach(container => {
             const exerciseName = container.id.replace('inputs-', '');
             const reps = container.querySelector(`[name^="reps-"]`).value;
-            formData.append(exerciseName, JSON.stringify({ reps }));
+            formData.append(exerciseName, reps);
         });
 
         const sets = document.querySelector('[name="sets-all"]').value;
         formData.append('sets', sets);
 
-        fetch('process_exercises.php', {
+        fetch('routes/exercise_preparation.php', {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(response => response.text()) // Fetch raw response as text
         .then(data => {
-            console.log('Success:', data);
-            disableInputs();
+            console.log('Raw Response:', data);
+            try {
+                const jsonData = JSON.parse(data);
+                console.log('Success:', jsonData);
+
+                // Log individual exercise data
+                for (let exercise in jsonData) {
+                    if (exercise !== 'sets') {
+                        console.log(`${exercise} reps: ${jsonData[exercise]}`);
+                    }
+                }
+                console.log(`Sets: ${jsonData['sets']}`);
+                disableInputs();
+            } catch (error) {
+                console.error('JSON Parse Error:', error);
+                console.error('Response was not valid JSON:', data);
+            }
         })
         .catch((error) => {
-            console.error('Error:', error);
+            console.error('Fetch Error:', error);
         });
     }
 

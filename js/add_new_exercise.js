@@ -1,3 +1,4 @@
+
 document.getElementById("addNewExercise").addEventListener("click", function() {
 
     // Get the card body where the form will be added
